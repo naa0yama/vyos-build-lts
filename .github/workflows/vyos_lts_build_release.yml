@@ -1,0 +1,71 @@
+name: VyOS LTS Build
+
+on:
+  push:
+    tags:
+      - "*"
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    container: 
+      # For VyOS 1.2 (crux) use vyos/vyos-build:crux
+      # For VyOS 1.3 (equuleus) use vyos/vyos-build:equuleus
+      # For our VyOS rolling release you should use vyos/vyos-build which will always refer to the latest image.
+      # Ref: https://docs.vyos.io/en/latest/contributing/build-vyos.html#build
+      image: vyos/vyos-build:crux
+      env:
+        TZ: Asia/Tokyo
+      options: --privileged
+      
+
+    steps:
+    - name: git clone vyos-build
+      run: |
+        set -eux
+        
+        git clone -b crux --single-branch https://github.com/vyos/vyos-build
+
+    - name: configure
+      working-directory: vyos-build
+      run: |
+        set -eux
+        
+        ./configure \
+          --architecture amd64 \
+          --build-by naa0yama@aoya6i.com \
+          --build-type release \
+          --version 1.2.4
+
+    - name: make iso
+      working-directory: vyos-build
+      run: |
+        set -eux
+        
+        make iso
+        ls -lah build
+
+    - uses: actions/create-release@master
+      id: create_release # ファイルアップロードに outputs の値を使用するため ID が必要
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: VyOS ${{ github.ref }} LTS
+        body: |
+          VyOS ${{ github.ref }} LTS
+        draft: true
+        prerelease: true
+
+    - uses: actions/upload-release-asset@master
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        # リリースのアップロード URL (必須)
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        # 添付ファイルのパス (必須)
+        asset_path: ./vyos-build/build/vyos-${{ github.ref }}-amd64.iso
+        # 添付ファイルの表示名 (必須)
+        asset_name: vyos-${{ github.ref }}-amd64.iso
+        # 添付ファイルに対応する content-type (必須)
+        asset_content_type: application/x-iso9660-image
