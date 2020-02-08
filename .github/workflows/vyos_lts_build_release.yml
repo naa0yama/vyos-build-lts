@@ -46,6 +46,13 @@ jobs:
         pwd
         ls -lah build
 
+    - name: debug
+      run: |
+        set -eux
+
+        ls -lah
+        ls -lah vyos-build/build
+
     - uses: actions/create-release@master
       id: create_release # ファイルアップロードに outputs の値を使用するため ID が必要
       env:
@@ -65,7 +72,7 @@ jobs:
         # リリースのアップロード URL (必須)
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         # 添付ファイルのパス (必須)
-        asset_path: ./vyos-build/build/vyos-${{ github.ref }}-amd64.iso
+        asset_path: vyos-build/build/vyos-${{ github.ref }}-amd64.iso
         # 添付ファイルの表示名 (必須)
         asset_name: vyos-${{ github.ref }}-amd64.iso
         # 添付ファイルに対応する content-type (必須)
