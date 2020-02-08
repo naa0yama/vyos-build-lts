@@ -14,12 +14,12 @@ jobs:
       image: vyos/vyos-build:crux
 
     steps:
-    - uses: actions/checkout@v2
-    
-    - name: Run a one-line script
-      run: echo Hello, world!
-
-    - name: Run a multi-line script
+    - name: configure
       run: |
-        echo Add other actions to build,
-        echo test, and deploy your project.
+        set -eux
+        
+        ./configure \
+          --architecture amd64 \
+          --build-by naa0yama@aoya6i.com \
+          --build-type release \
+          --version 1.2.4
