@@ -42,7 +42,8 @@ jobs:
       run: |
         set -eux
         
-        make iso
+        #make iso
+        pwd
         ls -lah build
 
     - uses: actions/create-release@master
