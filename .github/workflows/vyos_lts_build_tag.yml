@@ -25,10 +25,16 @@ jobs:
       run: |
         set -eux
         
-        pwd
-        ls -lah
         ./configure \
           --architecture amd64 \
           --build-by naa0yama@aoya6i.com \
           --build-type release \
           --version 1.2.4
+
+    - name: make iso
+      working-directory: vyos-build
+      run: |
+        set -eux
+        
+        make iso
+        ls -lah build
