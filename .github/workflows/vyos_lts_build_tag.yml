@@ -14,10 +14,18 @@ jobs:
       image: vyos/vyos-build:crux
 
     steps:
+    - name: git clone vyos-build
+      run: |
+        set -eux
+        
+        git clone -b current --single-branch https://github.com/vyos/vyos-build
+
     - name: configure
       run: |
         set -eux
         
+        pwd
+        ls -lah
         ./configure \
           --architecture amd64 \
           --build-by naa0yama@aoya6i.com \
