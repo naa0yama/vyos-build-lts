@@ -64,7 +64,7 @@ jobs:
         tag_name: ${{ github.ref }}
         release_name: VyOS ${{ github.ref }} LTS
         body: |
-          VyOS ${{ github.ref }} LTS
+          VyOS ${{ env.RELEASE_VERSION }} LTS
         draft: true
         prerelease: true
 
