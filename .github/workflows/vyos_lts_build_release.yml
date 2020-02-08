@@ -1,11 +1,9 @@
 name: VyOS LTS Build
 
-#on:
-#  push:
-#    tags:
-#      - "*"
 on:
-  - push
+  push:
+    tags:
+      - "*"
 
 jobs:
   build:
@@ -23,6 +21,9 @@ jobs:
       
 
     steps:
+    - name: Set env
+      run: echo ::set-env name=RELEASE_VERSION::${GITHUB_REF:10}
+
     - name: git clone vyos-build
       run: |
         set -eux
@@ -38,14 +39,7 @@ jobs:
           --architecture amd64 \
           --build-by naa0yama@aoya6i.com \
           --build-type release \
-          --version 1.2.4
-
-    - name: Set env
-      run: echo ::set-env name=RELEASE_VERSION::${GITHUB_REF:10}
-    - name: Test
-      run: |
-        echo $RELEASE_VERSION
-        echo ${{ env.RELEASE_VERSION }}
+          --version ${{ env.RELEASE_VERSION }}
 
     - name: make iso
       working-directory: vyos-build
@@ -82,8 +76,8 @@ jobs:
         # リリースのアップロード URL (必須)
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         # 添付ファイルのパス (必須)
-        asset_path: vyos-build/build/vyos-${{ github.ref }}-amd64.iso
+        asset_path: vyos-build/build/vyos-${{ env.RELEASE_VERSION }}-amd64.iso
         # 添付ファイルの表示名 (必須)
-        asset_name: vyos-${{ github.ref }}-amd64.iso
+        asset_name: vyos-${{ env.RELEASE_VERSION }}-amd64.iso
         # 添付ファイルに対応する content-type (必須)
         asset_content_type: application/x-iso9660-image
