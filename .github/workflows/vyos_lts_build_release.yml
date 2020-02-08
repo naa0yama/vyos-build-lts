@@ -1,9 +1,12 @@
 name: VyOS LTS Build
 
+#on:
+#  push:
+#    tags:
+#      - "*"
 on:
-  push:
-    tags:
-      - "*"
+  - push
+
 jobs:
   build:
 
@@ -36,6 +39,13 @@ jobs:
           --build-by naa0yama@aoya6i.com \
           --build-type release \
           --version 1.2.4
+
+    - name: Set env
+      run: echo ::set-env name=RELEASE_VERSION::${GITHUB_REF:10}
+    - name: Test
+      run: |
+        echo $RELEASE_VERSION
+        echo ${{ env.RELEASE_VERSION }}
 
     - name: make iso
       working-directory: vyos-build
