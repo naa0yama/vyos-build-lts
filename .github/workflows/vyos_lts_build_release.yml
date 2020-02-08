@@ -46,14 +46,13 @@ jobs:
       run: |
         set -eux
         
-        #make iso
-        pwd
-        ls -lah build
+        make iso
 
-    - name: debug
+    - name: ls
       run: |
         set -eux
 
+        pwd
         ls -lah
         ls -lah vyos-build/build
 
