@@ -12,6 +12,8 @@ jobs:
       # For our VyOS rolling release you should use vyos/vyos-build which will always refer to the latest image.
       # Ref: https://docs.vyos.io/en/latest/contributing/build-vyos.html#build
       image: vyos/vyos-build:crux
+      options: --privileged
+      
 
     steps:
     - name: git clone vyos-build
