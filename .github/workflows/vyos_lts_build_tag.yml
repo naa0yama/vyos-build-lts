@@ -18,9 +18,10 @@ jobs:
       run: |
         set -eux
         
-        git clone -b current --single-branch https://github.com/vyos/vyos-build
+        git clone -b crux --single-branch https://github.com/vyos/vyos-build
 
     - name: configure
+      working-directory: vyos-build
       run: |
         set -eux
         
