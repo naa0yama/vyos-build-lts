@@ -1,4 +1,9 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["github>naa0yama/renovate-config"]
+  "extends": [
+    "github>naa0yama/renovate-config"
+  ],
+  "assignees": [
+    "@naa0yama"
+  ]
 }
