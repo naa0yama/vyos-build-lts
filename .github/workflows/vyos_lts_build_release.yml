@@ -39,23 +39,23 @@ jobs:
           
           git clone -b sagitta --single-branch https://github.com/vyos/vyos-build
 
-      - name: configure
+      - name: Cleanup env
         working-directory: vyos-build
         run: |
           set -eux
-          
-          ./configure \
-            --architecture amd64 \
-            --build-by 9667078+naa0yama@users.noreply.github.com \
-            --build-type release \
-            --version ${{ inputs.version }}
 
-      - name: make iso
+          make clean
+
+      - name: Make ISO
         working-directory: vyos-build
         run: |
           set -eux
           
-          make iso
+          ./build-vyos-image iso \
+            --architecture "amd64" \
+            --build-by "9667078+naa0yama@users.noreply.github.com" \
+            --build-type "release" \
+            --version "${{ inputs.version }}"
 
       - name: ls
         run: |
